@@ -4,9 +4,11 @@ using UnityEngine;
 public class ShipController : MonoBehaviour
 {
     [SerializeField] private float _rotateDuration;
+    [SerializeField] private AnimationCurve _moveCurve;
+    [SerializeField] private AnimationCurve _rotationCurve;
 
     private Vector2Int _currentGridPosition = Vector2Int.zero;
-    private float _moveDuration = 0.5f;
+    private float _moveDuration = 0.2f;
     private Coroutine _moveRoutine, _rotateRoutine, _stabilizeRoutine;
 
     private void Update()
@@ -69,7 +71,7 @@ public class ShipController : MonoBehaviour
         while (totalTraveled < 1)
         {
             totalTraveled = timeElapsed / _moveDuration;
-            var next = Vector3.Lerp(originalPosition, finalPosition, totalTraveled);
+            var next = Vector3.Lerp(originalPosition, finalPosition, _moveCurve.Evaluate(totalTraveled));
             transform.position = next;
             timeElapsed += Time.deltaTime;
             yield return null;
@@ -87,7 +89,7 @@ public class ShipController : MonoBehaviour
         while (totalRotated < 1)
         {
             totalRotated = timeElapsed / duration;
-            var next = Quaternion.Lerp(originalRotation, finalRotation, totalRotated);
+            var next = Quaternion.Lerp(originalRotation, finalRotation, _rotationCurve.Evaluate(totalRotated));
             transform.rotation = next;
             timeElapsed += Time.deltaTime;
             yield return null;
