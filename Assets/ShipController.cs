@@ -13,29 +13,29 @@ public class ShipController : MonoBehaviour
 
     private void Update()
     {
-        var a = Input.GetKeyDown(KeyCode.A);
-        var d = Input.GetKeyDown(KeyCode.D);
-        var w = Input.GetKeyDown(KeyCode.W);
-        var s = Input.GetKeyDown(KeyCode.S);
+        var leftKey = Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow);
+        var rightKey = Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow);
+        var upKey = Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow);
+        var downKey = Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow);
 
         var horizontal = 0;
-        if (a)
+        if (leftKey)
         {
             horizontal--;
         }
 
-        if (d)
+        if (rightKey)
         {
             horizontal++;
         }
 
         var vertical = 0;
-        if (w)
+        if (upKey)
         {
             vertical++;
         }
 
-        if (s)
+        if (downKey)
         {
             vertical--;
         }
