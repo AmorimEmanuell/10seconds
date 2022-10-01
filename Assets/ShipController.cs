@@ -5,8 +5,7 @@ public class ShipController : MonoBehaviour
 {
     [SerializeField] private float _rotateDuration;
 
-    private Vector2 _currentGridPosition = Vector2.zero;
-    private Vector2 Grid = new Vector2(5, 5);
+    private Vector2Int _currentGridPosition = Vector2Int.zero;
     private float _moveDuration = 0.5f;
     private Coroutine _moveRoutine, _rotateRoutine, _stabilizeRoutine;
 
@@ -44,13 +43,21 @@ public class ShipController : MonoBehaviour
             return;
         }
 
+        var nextX = Mathf.Clamp(_currentGridPosition.x + horizontal, -2, 2);
+        var nextY = Mathf.Clamp(_currentGridPosition.y + vertical, -2, 2);
+        var nextGridPosition = new Vector2Int(nextX, nextY);
+        if (_currentGridPosition == nextGridPosition)
+        {
+            return;
+        }
+
+        var delta = nextGridPosition - _currentGridPosition;
+        _currentGridPosition = nextGridPosition;
+
         StopAllCoroutines();
 
-        var deltaMovement = new Vector2(horizontal, vertical);
-        _currentGridPosition += deltaMovement;
-
         _moveRoutine = StartCoroutine(MoveRoutine(_currentGridPosition));
-        _rotateRoutine = StartCoroutine(RotateRoutine(deltaMovement, _rotateDuration));
+        _rotateRoutine = StartCoroutine(RotateRoutine(delta, _rotateDuration));
     }
 
     private IEnumerator MoveRoutine(Vector2 gridPosition)
