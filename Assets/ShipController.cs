@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -10,7 +9,6 @@ public class ShipController : MonoBehaviour
     private Vector2 Grid = new Vector2(5, 5);
     private float _moveDuration = 0.5f;
     private Coroutine _moveRoutine, _rotateRoutine, _stabilizeRoutine;
-    private bool _isMoving = false, _isStabilizing;
 
     private void Update()
     {
@@ -46,8 +44,6 @@ public class ShipController : MonoBehaviour
             return;
         }
 
-        _isStabilizing = false;
-        _isMoving = false;
         StopAllCoroutines();
 
         var deltaMovement = new Vector2(horizontal, vertical);
@@ -59,7 +55,6 @@ public class ShipController : MonoBehaviour
 
     private IEnumerator MoveRoutine(Vector2 gridPosition)
     {
-        _isMoving = true;
         var finalPosition = new Vector2(gridPosition.x * 1.5f, gridPosition.y * 1.5f);
         var originalPosition = transform.position;
         var totalTraveled = 0f;
@@ -72,8 +67,6 @@ public class ShipController : MonoBehaviour
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-
-        _isMoving = false;
     }
 
     private IEnumerator RotateRoutine(Vector2 deltaMovement, float duration)
