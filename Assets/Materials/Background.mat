@@ -26,8 +26,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FogDistance: 0.8
-    - _FogIntensity: 0.02
+    - _FogDistance: 0.5
+    - _FogIntensity: 0.012
     - _Speed: 0.4
     m_Colors: []
   m_BuildTextureStacks: []
