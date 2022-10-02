@@ -14,6 +14,7 @@ Shader "Unlit/Cube"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
 
@@ -26,6 +27,7 @@ Shader "Unlit/Cube"
             struct v2f
             {
                 float2 uv : TEXCOORD0;
+                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
             };
 
@@ -36,6 +38,7 @@ Shader "Unlit/Cube"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
+                UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;
             }
 
@@ -45,8 +48,11 @@ Shader "Unlit/Cube"
                 float2 d = abs(uv) - 0.7;
                 d *= 6;
                 fixed4 col = length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
+                col = saturate(col * _Color);
 
-                return col * _Color;
+
+                UNITY_APPLY_FOG(i.fogCoord, col);
+                return col;
             }
             ENDCG
         }
