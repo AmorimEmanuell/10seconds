@@ -11,12 +11,27 @@ public class ShipController : MonoBehaviour
     private float _moveDuration = 0.2f;
     private Coroutine _moveRoutine, _rotateRoutine, _stabilizeRoutine;
 
+    private float _cameraAngle = 0f;
+
+    private bool _isHorizontalInverted = false;
+    private bool _isVerticalInverted = false;
+
+    private void Start()
+    {
+        InvokeRepeating("randomlyApplyEffect", 10f, 10f);
+    }
+
     private void Update()
     {
-        var leftKey = Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow);
-        var rightKey = Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow);
-        var upKey = Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow);
-        var downKey = Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow);
+        var isPressingLeft = Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow);
+        var isPressingRight =  Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow);
+        var isPressingUp = Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow);
+        var isPressingDown = Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow);
+
+        var leftKey = !_isHorizontalInverted ? isPressingLeft : isPressingRight;
+        var rightKey = !_isHorizontalInverted ? isPressingRight : isPressingLeft;
+        var upKey = !_isVerticalInverted ? isPressingUp : isPressingDown;
+        var downKey = !_isVerticalInverted ? isPressingDown : isPressingUp;
 
         var horizontal = 0;
         if (leftKey)
@@ -45,8 +60,12 @@ public class ShipController : MonoBehaviour
             return;
         }
 
-        var nextX = Mathf.Clamp(_currentGridPosition.x + horizontal, -2, 2);
-        var nextY = Mathf.Clamp(_currentGridPosition.y + vertical, -2, 2);
+        // Get 
+        int min = Constants.GRID_SIZE % 2 == 0 ? -(Constants.GRID_SIZE / 2) : -((Constants.GRID_SIZE-1) / 2);
+        int max = Constants.GRID_SIZE % 2 == 0 ? (Constants.GRID_SIZE / 2)-1 : (Constants.GRID_SIZE-1) / 2;
+
+        var nextX = Mathf.Clamp(_currentGridPosition.x + horizontal, min, max);
+        var nextY = Mathf.Clamp(_currentGridPosition.y + vertical, min, max);
         var nextGridPosition = new Vector2Int(nextX, nextY);
         if (_currentGridPosition == nextGridPosition)
         {
@@ -56,7 +75,10 @@ public class ShipController : MonoBehaviour
         var delta = nextGridPosition - _currentGridPosition;
         _currentGridPosition = nextGridPosition;
 
-        StopAllCoroutines();
+        if (_moveRoutine != null)
+            StopCoroutine(_moveRoutine);
+        if (_rotateRoutine != null)
+            StopCoroutine(_rotateRoutine);
 
         _moveRoutine = StartCoroutine(MoveRoutine(_currentGridPosition));
         _rotateRoutine = StartCoroutine(RotateRoutine(delta, _rotateDuration));
@@ -102,10 +124,43 @@ public class ShipController : MonoBehaviour
         while (totalRotated < 1)
         {
             totalRotated = timeElapsed / duration;
-            var next = Quaternion.Lerp(originalRotation, finalRotation, totalRotated);
+            var next = Quaternion.Lerp(originalRotation, finalRotation, _rotationCurve.Evaluate(totalRotated));
             transform.rotation = next;
             timeElapsed += Time.deltaTime;
             yield return null;
         }
+    }
+
+    private IEnumerator RotateCameraRoutine(float duration)
+    {
+        var finalRotation = Quaternion.Euler(new Vector3(0, 0, _cameraAngle));
+        var originalRotation = Camera.main.transform.rotation;
+        var totalRotated = 0f;
+        var timeElapsed = 0f;
+        while (totalRotated < 1)
+        {
+            totalRotated = timeElapsed / duration;
+            var next = Quaternion.Lerp(originalRotation, finalRotation, totalRotated);
+            Camera.main.transform.rotation = next;
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    void randomlyApplyEffect()
+    {
+        // This inverts the buttons being pressed
+        // if ((Random.Range(0f, 1f) * 10) > 5)
+        // {
+        //     _isVerticalInverted = !_isVerticalInverted;
+        // } 
+        // else
+        // { 
+        //     _isHorizontalInverted = !_isHorizontalInverted;
+        // }
+
+        // This rotates the camera
+        _cameraAngle -= 30f;
+        StartCoroutine(RotateCameraRoutine(1.25f));
     }
 }
