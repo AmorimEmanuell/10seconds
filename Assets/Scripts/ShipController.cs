@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,42 +9,51 @@ public class ShipController : MonoBehaviour
     [SerializeField] private AnimationCurve _rotationCurve;
 
     private Vector2Int _currentGridPosition = Vector2Int.zero;
-    private float _moveDuration = 0.2f;
-    private Coroutine _moveRoutine, _rotateRoutine, _stabilizeRoutine;
+    private Coroutine _moveRoutine, _rotateRoutine;
+    private bool _isGameRunning;
 
-    private bool _isHorizontalInverted = false;
-    private bool _isVerticalInverted = false;
+    private readonly float _moveDuration = 0.2f;
+
+    private void Start()
+    {
+        GameEvents.OnGameStart += StartGame;
+    }
+
+    private void StartGame()
+    {
+        _isGameRunning = true;
+    }
 
     private void Update()
     {
+        if (!_isGameRunning)
+        {
+            return;
+        }
+
         var isPressingLeft = Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow);
         var isPressingRight =  Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow);
         var isPressingUp = Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow);
         var isPressingDown = Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow);
 
-        var leftKey = !_isHorizontalInverted ? isPressingLeft : isPressingRight;
-        var rightKey = !_isHorizontalInverted ? isPressingRight : isPressingLeft;
-        var upKey = !_isVerticalInverted ? isPressingUp : isPressingDown;
-        var downKey = !_isVerticalInverted ? isPressingDown : isPressingUp;
-
         var horizontal = 0;
-        if (leftKey)
+        if (isPressingLeft)
         {
             horizontal--;
         }
 
-        if (rightKey)
+        if (isPressingRight)
         {
             horizontal++;
         }
 
         var vertical = 0;
-        if (upKey)
+        if (isPressingUp)
         {
             vertical++;
         }
 
-        if (downKey)
+        if (isPressingDown)
         {
             vertical--;
         }
@@ -69,9 +79,14 @@ public class ShipController : MonoBehaviour
         _currentGridPosition = nextGridPosition;
 
         if (_moveRoutine != null)
+        {
             StopCoroutine(_moveRoutine);
+        }
+
         if (_rotateRoutine != null)
+        {
             StopCoroutine(_rotateRoutine);
+        }
 
         _moveRoutine = StartCoroutine(MoveRoutine(_currentGridPosition));
         _rotateRoutine = StartCoroutine(RotateRoutine(delta, _rotateDuration));

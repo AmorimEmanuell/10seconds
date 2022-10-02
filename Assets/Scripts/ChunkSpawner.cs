@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,14 +58,19 @@ public class ChunkSpawner : MonoBehaviour
         }
     };
 
-    void Start()
+    private void Start()
+    {
+        GameEvents.OnGameStart += StartGame;
+    }
+
+    private void StartGame()
     {
         InvokeRepeating("Spawn", 0f, _secondsBetweenChunks);
     }
 
     void Spawn()
     {
-        int nextChunkIndex = Random.Range(0, _chunks.Count - 1);
+        int nextChunkIndex = UnityEngine.Random.Range(0, _chunks.Count - 1);
         // nextChunkIndex = 4;
         //Debug.Log(nextChunkIndex);
 
@@ -73,8 +79,8 @@ public class ChunkSpawner : MonoBehaviour
         // Debug.Log($"width {chunkWidth}");
         // Debug.Log($"height {chunkHeight}");
 
-        int nextX = Random.Range(0, Constants.GRID_SIZE - 1);
-        int nextY = Random.Range(0, Constants.GRID_SIZE - 1);
+        int nextX = UnityEngine.Random.Range(0, Constants.GRID_SIZE - 1);
+        int nextY = UnityEngine.Random.Range(0, Constants.GRID_SIZE - 1);
         // nextX = 2;
         // nextY = 1;
         // Debug.Log($"next X {nextX}");
