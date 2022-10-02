@@ -11,15 +11,8 @@ public class ShipController : MonoBehaviour
     private float _moveDuration = 0.2f;
     private Coroutine _moveRoutine, _rotateRoutine, _stabilizeRoutine;
 
-    private float _cameraAngle = 0f;
-
     private bool _isHorizontalInverted = false;
     private bool _isVerticalInverted = false;
-
-    private void Start()
-    {
-        TimeCounter.OnTimeReached += RandomlyApplyEffect;
-    }
 
     private void Update()
     {
@@ -129,38 +122,5 @@ public class ShipController : MonoBehaviour
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-    }
-
-    private IEnumerator RotateCameraRoutine(float duration)
-    {
-        var finalRotation = Quaternion.Euler(new Vector3(0, 0, _cameraAngle));
-        var originalRotation = Camera.main.transform.rotation;
-        var totalRotated = 0f;
-        var timeElapsed = 0f;
-        while (totalRotated < 1)
-        {
-            totalRotated = timeElapsed / duration;
-            var next = Quaternion.Lerp(originalRotation, finalRotation, totalRotated);
-            Camera.main.transform.rotation = next;
-            timeElapsed += Time.deltaTime;
-            yield return null;
-        }
-    }
-
-    private void RandomlyApplyEffect()
-    {
-        // This inverts the buttons being pressed
-        // if ((Random.Range(0f, 1f) * 10) > 5)
-        // {
-        //     _isVerticalInverted = !_isVerticalInverted;
-        // } 
-        // else
-        // { 
-        //     _isHorizontalInverted = !_isHorizontalInverted;
-        // }
-
-        // This rotates the camera
-        _cameraAngle -= 30f;
-        StartCoroutine(RotateCameraRoutine(1.25f));
     }
 }
