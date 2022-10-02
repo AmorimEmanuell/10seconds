@@ -123,4 +123,9 @@ public class ShipController : MonoBehaviour
             yield return null;
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Destroy(this.gameObject, 0f);
+    }
 }
