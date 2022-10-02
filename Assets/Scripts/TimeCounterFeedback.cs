@@ -7,6 +7,6 @@ public class TimeCounterFeedback : MonoBehaviour
 
     private void Update()
     {
-        _slider.value = TimeCounter.ElapsedPercentage;
+        _slider.value = TimeCounter.SectionPercentage;
     }
 }
