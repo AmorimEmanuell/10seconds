@@ -18,7 +18,7 @@ public class ShipController : MonoBehaviour
 
     private void Start()
     {
-        InvokeRepeating("randomlyApplyEffect", 10f, 10f);
+        TimeCounter.OnTimeReached += RandomlyApplyEffect;
     }
 
     private void Update()
@@ -147,7 +147,7 @@ public class ShipController : MonoBehaviour
         }
     }
 
-    void randomlyApplyEffect()
+    private void RandomlyApplyEffect()
     {
         // This inverts the buttons being pressed
         // if ((Random.Range(0f, 1f) * 10) > 5)
