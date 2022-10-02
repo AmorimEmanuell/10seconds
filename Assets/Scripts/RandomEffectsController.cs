@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RandomEffectsController : MonoBehaviour
@@ -12,7 +11,13 @@ public class RandomEffectsController : MonoBehaviour
 
     private void Start()
     {
+        GameEvents.OnGameEnded += EndGame;
         TimeCounter.OnTimeReached += RandomlyApplyEffect;
+    }
+
+    private void EndGame()
+    {
+        _camera.rotation = Quaternion.identity;
     }
 
     private void RandomlyApplyEffect()

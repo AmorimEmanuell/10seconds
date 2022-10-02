@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -22,6 +21,12 @@ public class ShipController : MonoBehaviour
     private void StartGame()
     {
         _isGameRunning = true;
+        _currentGridPosition = Vector2Int.zero;
+
+        transform.position = Vector3.zero;
+        transform.rotation = Quaternion.identity;
+
+        gameObject.SetActive(true);
     }
 
     private void Update()
@@ -141,6 +146,11 @@ public class ShipController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(this.gameObject, 0f);
+        _isGameRunning = false;
+
+        StopAllCoroutines();
+
+        gameObject.SetActive(false);
+        GameEvents.RaiseOnGameEnded();
     }
 }

@@ -16,6 +16,7 @@ public class TimeCounter : MonoBehaviour
     private void Start()
     {
         GameEvents.OnGameStart += StartGame;
+        GameEvents.OnGameEnded += EndGame;
     }
 
     private void StartGame()
@@ -24,6 +25,11 @@ public class TimeCounter : MonoBehaviour
         TotalElapsedTime = 0f;
 
         _isGameRunning = true;
+    }
+
+    private void EndGame()
+    {
+        _isGameRunning = false;
     }
 
     private void Update()

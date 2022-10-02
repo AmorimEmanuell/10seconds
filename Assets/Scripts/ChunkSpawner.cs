@@ -61,11 +61,17 @@ public class ChunkSpawner : MonoBehaviour
     private void Start()
     {
         GameEvents.OnGameStart += StartGame;
+        GameEvents.OnGameEnded += EndGame;
     }
 
     private void StartGame()
     {
         InvokeRepeating("Spawn", 0f, _secondsBetweenChunks);
+    }
+
+    private void EndGame()
+    {
+        CancelInvoke();
     }
 
     void Spawn()
