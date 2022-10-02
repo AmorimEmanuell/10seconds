@@ -46,6 +46,9 @@ Shader "Unlit/Background"
             {
 
                 float2 uv = i.uv * 2 - 1;
+                uv.x += sin(_Time.y * 0.6) * 0.2;
+                uv.y += cos(_Time.y * 0.5) * 0.3;
+
                 float a = atan2(uv.y, uv.x);
                 float r = length(uv);
 
