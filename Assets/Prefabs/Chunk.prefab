@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9053865790214872643}
   - component: {fileID: -9073945569706219448}
+  - component: {fileID: 8400236821207566518}
   m_Layer: 0
   m_Name: Chunk
   m_TagString: Untagged
@@ -45,3 +46,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 10
+--- !u!114 &8400236821207566518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2300600086780418583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4066e0d0120ac4976a5622b8663e3138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _debrisPrefab: {fileID: 1885966346493602555, guid: a43a233e4e94d497f8b01487a3fd78f5, type: 3}
