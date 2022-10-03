@@ -11,13 +11,20 @@ public class RandomEffectsController : MonoBehaviour
 
     private void Start()
     {
+        GameEvents.OnGameStart += StartGame;
         GameEvents.OnGameEnded += EndGame;
         TimeCounter.OnTimeReached += RandomlyApplyEffect;
     }
 
-    private void EndGame()
+    private void StartGame()
     {
         _camera.transform.rotation = Quaternion.identity;
+        _cameraAngle = 0f;
+    }
+
+    private void EndGame()
+    {
+        StopAllCoroutines();
     }
 
     private void RandomlyApplyEffect()
