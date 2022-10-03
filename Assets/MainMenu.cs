@@ -31,6 +31,6 @@ public class MainMenu : MonoBehaviour
         _mainPanel.SetActive(true);
 
         _finalScorePanel.SetActive(true);
-        _finalScoreText.SetText("{0}", ScoreCounter.CurrentScore);
+        _finalScoreText.SetText("Final Score: {0}", ScoreCounter.CurrentScore);
     }
 }
