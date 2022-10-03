@@ -27,7 +27,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _FogDistance: 0.5
-    - _FogIntensity: 0.012
+    - _FogIntensity: 0.0372
     - _Speed: 0.4
     m_Colors: []
   m_BuildTextureStacks: []

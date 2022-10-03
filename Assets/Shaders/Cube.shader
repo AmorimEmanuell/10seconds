@@ -3,6 +3,7 @@ Shader "Unlit/Cube"
     Properties
     {
         _Color ("Color", Color) = (1,1,1,1)
+        _Tiles ("Tiles", Float) = 4
     }
     SubShader
     {
@@ -32,6 +33,7 @@ Shader "Unlit/Cube"
             };
 
             float4 _Color;
+            float _Tiles;
 
             v2f vert (appdata v)
             {
@@ -44,7 +46,7 @@ Shader "Unlit/Cube"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                float2 uv = frac(i.uv * 4) * 2 - 1;
+                float2 uv = frac(i.uv * _Tiles) * 2 - 1;
                 float2 d = abs(uv) - 0.7;
                 d *= 6;
                 fixed4 col = length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);

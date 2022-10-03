@@ -10,6 +10,9 @@ public class ChunkSpawner : MonoBehaviour
 
     [SerializeField] private int _showNewCunksEvery = 2;
 
+    [SerializeField] private MeshRenderer _backgroundRenderer;
+    private float _backgroundSpeed = 0.4f;
+
     private bool _isSpawning = false;
     private float _elapsedTime = 0f;
 
@@ -232,6 +235,9 @@ public class ChunkSpawner : MonoBehaviour
 
         if (_startIncreaseChunkSpeed) {
             _secondsBetweenChunks -= 0.05f;
+            _backgroundSpeed += 0.05f;
+            _backgroundRenderer.material.SetFloat("_Speed", _backgroundSpeed);
+
 
             if (_secondsBetweenChunks < minTimeDistanceBetweenChunks) {
                 _secondsBetweenChunks = minTimeDistanceBetweenChunks;

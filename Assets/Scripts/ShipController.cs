@@ -6,6 +6,7 @@ public class ShipController : MonoBehaviour
     [SerializeField] private float _rotateDuration;
     [SerializeField] private AnimationCurve _moveCurve;
     [SerializeField] private AnimationCurve _rotationCurve;
+    [SerializeField] private GameObject _explosionVFX;
 
     private Vector2Int _currentGridPosition = Vector2Int.zero;
     private Coroutine _moveRoutine, _rotateRoutine;
@@ -146,6 +147,7 @@ public class ShipController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Instantiate(_explosionVFX, gameObject.transform.position, Quaternion.identity);
         _isGameRunning = false;
 
         StopAllCoroutines();
