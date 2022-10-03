@@ -17,7 +17,7 @@ public class RandomEffectsController : MonoBehaviour
 
     private void EndGame()
     {
-        _camera.rotation = Quaternion.identity;
+        _camera.transform.rotation = Quaternion.identity;
     }
 
     private void RandomlyApplyEffect()

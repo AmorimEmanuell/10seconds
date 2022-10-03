@@ -10,7 +10,7 @@ public class ChunkController : MonoBehaviour
     {
         transform.Translate(Vector3.back * _speed * Time.deltaTime);
 
-        if (transform.position.z < Camera.main.transform.position.z)
+        if (transform.position.z - 5.5 < Camera.main.transform.position.z)
         {
             Destroy(this.gameObject, 0f);
         }

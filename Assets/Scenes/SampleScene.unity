@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5930,8 +5930,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 963194228}
-  _angle: 30
-  _rotationDuration: 1.25
+  _angle: 20
+  _rotationDuration: 3
 --- !u!4 &688648582
 Transform:
   m_ObjectHideFlags: 0
@@ -8127,7 +8127,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.4, y: 1.4, z: 1.4}
+  m_Size: {x: 0.69, y: 0.36, z: 0.94}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1574039777
 GameObject:
@@ -8601,7 +8601,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chunkPrefab: {fileID: 2300600086780418583, guid: c21d980181e9146baad6c80ad8d2ab58, type: 3}
   _cubePrefab: {fileID: 1098660137344665991, guid: ae4daa8cd7c07664d88ed0858fca70c9, type: 3}
-  _secondsBetweenChunks: 2
+  _secondsBetweenChunks: 0.8
+  _showNewCunksEvery: 3
 --- !u!1 &2042664545
 GameObject:
   m_ObjectHideFlags: 0
@@ -8693,8 +8694,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2042664545}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 20}
-  m_LocalScale: {x: 70, y: 70, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 47}
+  m_LocalScale: {x: 200, y: 200, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

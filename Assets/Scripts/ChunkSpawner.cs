@@ -8,13 +8,76 @@ public class ChunkSpawner : MonoBehaviour
     [SerializeField] private GameObject _cubePrefab;
     [SerializeField] private float _secondsBetweenChunks;
 
+    [SerializeField] private int _showNewCunksEvery = 2;
+
+    private bool _isSpawning = false;
+    private float _elapsedTime = 0f;
+
+    private int _increaseCount = 0;
+
+    private bool _startIncreaseChunkSpeed = false;
+
+    private int _lastRandomChunkIndex = -1;
+    private int _currentChunkRange = 0;
+
     // TODO: Use a better data structure to represent chunks
     private List<int[,]> _chunks = new List<int[,]> {
+        // 0 - 7
         new int[,] {
-            {1, 1, 1},
-            {1, 1, 1},
+            {1, 1},
+        },
+        new int[,] {
+            {1, 1},
+        },
+        new int[,] {
+            {1},
+            {1}
+        },
+        new int[,] {
+            {1},
+            {1}
+        },
+        new int[,] {
+            {1},
+            {1},
+            {1}
+        },
+        new int[,] {
             {1, 1, 1}
         },
+        new int[,] {
+            {1, 1},
+            {1, 1}
+        },
+        new int[,] {
+            {1, 1},
+            {1, 1}
+        },
+
+
+        // 8 - 11
+        new int[,] {
+            {1},
+            {1},
+            {1},
+            {1}
+        },
+        new int[,] {
+            {1, 1, 1, 1}
+        },
+        new int[,] {
+            {1, 1, 1},
+            {1, 1, 0},
+            {1, 0, 0}
+        },
+        new int[,] {
+            {1, 1, 1},
+            {0, 1, 1},
+            {0, 0, 0}
+        },
+
+
+        // 12 -
         new int[,] {
             {1, 1, 1, 1, 1},
             {0, 0, 0, 0, 0},
@@ -30,53 +93,77 @@ public class ChunkSpawner : MonoBehaviour
             {1, 0, 0, 0, 1}
         },
         new int[,] {
-            {1, 1, 1, 0, 0},
-            {1, 1, 1, 0, 0},
-            {1, 1, 1, 0, 0},
-            {1, 1, 1, 0, 0},
-            {1, 1, 1, 0, 0}
-        },
-        new int[,] {
-            {1, 1, 1, 0, 0},
-            {1, 1, 1, 0, 0},
-            {1, 1, 1, 0, 0},
-            {1, 1, 1, 0, 0},
-            {1, 1, 1, 0, 0}
-        },
-        new int[,] {
-            {1},
-            {1},
-            {1},
-            {1}
-        },
-        new int[,] {
-            {1, 1, 1, 1}
-        },
-        new int[,] {
+            {1, 1},
+            {1, 1},
+            {1, 1},
             {1, 1},
             {1, 1}
-        }
+        },
+        new int[,] {
+            {1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1},
+        },
+        new int[,] {
+            {0, 0, 1, 1, 1},
+            {0, 0, 0, 1, 1},
+            {1, 0, 0, 0, 1},
+            {1, 1, 0, 0, 0},
+            {1, 1, 1, 0, 0},
+        },
+    };
+
+    private List<Range> _chunkRanges = new List<Range> {
+        0..8,
+        4..12,
+        8..17
     };
 
     private void Start()
     {
         GameEvents.OnGameStart += StartGame;
         GameEvents.OnGameEnded += EndGame;
+
+        TimeCounter.OnTimeReached += IncreaseChunksRange;
     }
 
     private void StartGame()
     {
-        InvokeRepeating("Spawn", 0f, _secondsBetweenChunks);
+        _isSpawning = true;
+        _elapsedTime = 0f;
+        _currentChunkRange = 0;
+        _lastRandomChunkIndex = -1;
+        _increaseCount = 0;
     }
 
     private void EndGame()
     {
-        CancelInvoke();
+        _isSpawning = false;
+        foreach(Transform child in transform) {
+            Destroy(child.gameObject, 1f);
+        }
+    }
+
+    void Update()
+    {
+        if (_isSpawning) {
+            _elapsedTime -= Time.deltaTime;
+
+            if (_elapsedTime <= 0) {
+                Spawn();
+                _elapsedTime = _secondsBetweenChunks;
+            }
+        }
     }
 
     void Spawn()
     {
-        int nextChunkIndex = UnityEngine.Random.Range(0, _chunks.Count - 1);
+        int nextChunkIndex = _lastRandomChunkIndex;
+        while (nextChunkIndex == _lastRandomChunkIndex) {
+            nextChunkIndex = UnityEngine.Random.Range(
+                _chunkRanges[_currentChunkRange].Start.Value,
+                _chunkRanges[_currentChunkRange].End.Value);
+        } 
+        _lastRandomChunkIndex = nextChunkIndex;
         // nextChunkIndex = 4;
         //Debug.Log(nextChunkIndex);
 
@@ -125,6 +212,29 @@ public class ChunkSpawner : MonoBehaviour
                         cube.transform.parent = chunkPrefab.transform;
                     }
                 }
+            }
+        }
+    }
+
+    private void IncreaseChunksRange()
+    {
+        const float minTimeDistanceBetweenChunks = 0.25f;
+
+        if (++_increaseCount == _showNewCunksEvery) {
+            _increaseCount = 0;
+            _currentChunkRange++;
+        }
+
+        if (_currentChunkRange == _chunkRanges.Count) {
+            _currentChunkRange = _chunkRanges.Count - 1;
+            _startIncreaseChunkSpeed = true;
+        }
+
+        if (_startIncreaseChunkSpeed) {
+            _secondsBetweenChunks -= 0.05f;
+
+            if (_secondsBetweenChunks < minTimeDistanceBetweenChunks) {
+                _secondsBetweenChunks = minTimeDistanceBetweenChunks;
             }
         }
     }
